@@ -47,6 +47,10 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
            .authorizeRequests()
            .antMatchers("/", "index", "/css/*", "/js/*").permitAll()//for these patterns we permit all
            .antMatchers("/api/**").hasRole(STUDENT.name())//The api/** endpoints is accessed by students only. This is role based authentication.
+//                .antMatchers(HttpMethod.DELETE, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())//Permission based auth. It indicates that is is for a delete method
+//                .antMatchers(HttpMethod.POST, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
+//                .antMatchers(HttpMethod.PUT, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
+//                .antMatchers("/management/api/**").hasAnyRole(ADMIN.name(), ADMINTRAINEE.name())
            .anyRequest()
            .authenticated()
            .and()
@@ -80,14 +84,14 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .username("leuteris")
                 .password(passwordEncoder.encode("password"))
 //                .roles(STUDENT.name())//used for role based auth
-                .authorities(STUDENT.getGrantedAuthorities())
+                .authorities(STUDENT.getGrantedAuthorities())//permission based auth
                 .build();
 
         UserDetails tom = User.builder()
                 .username("tom")
                 .password(passwordEncoder.encode("password123"))
 //                .roles(ADMINTRAINEE.name())
-                .authorities(ADMIN.getGrantedAuthorities())
+                .authorities(ADMIN.getGrantedAuthorities())//permission based auth
                 .build();
 
         UserDetails linda = User.builder()
